@@ -1,0 +1,9 @@
+# python3.11
+camelot-py[cv]
+PyPDF2~=2.0
+sentence_transformers
+text2vec
+streamlit==1.28.2
+openai
+streamlit-lottie
+streamlit_folium
