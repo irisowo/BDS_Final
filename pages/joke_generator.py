@@ -5,18 +5,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def get_joke(keyword, temperature=2):
+def get_joke(keyword, temperature=0.7):
     # Simulating an API call to OpenAI's GPT-3
     # return f'{keyword} Hahaha'
     client = OpenAI()
-    prompt = f'Create a joke containing the word \"{keyword}\".'
-    response = client.completions.create(
-        model="gpt-3.5-turbo-instruct",
-        prompt=prompt,
+    system_msg = 'You are a humorous assistant. Please tell some jokes. You should only respond at a maximum of 4 sentences.'
+    prompt = f'Tell me a joke with the word {keyword} in it.'
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {'role': 'system', 'content': system_msg},
+            {'role': 'user', 'content': prompt}
+        ],
         temperature=temperature,
-        max_tokens=150
+        max_tokens=50,
+        frequency_penalty=2,
+
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message.content.strip()
 
 st.title('Joke Generator')
 st.write('Generate a joke based on a vocabulary you give.')
