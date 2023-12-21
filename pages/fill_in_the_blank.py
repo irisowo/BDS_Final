@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def get_question(topic, temperature=0.7):
+def get_question(topic, temperature=2):
     # Simulating an API call to OpenAI's GPT-3
     client = openai.OpenAI()
 

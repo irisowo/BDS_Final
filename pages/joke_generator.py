@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def get_joke(keyword, temperature=0.7):
+def get_joke(keyword, temperature=2):
     # Simulating an API call to OpenAI's GPT-3
     # return f'{keyword} Hahaha'
     client = OpenAI()
