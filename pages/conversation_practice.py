@@ -5,16 +5,15 @@ from streamlit_lottie import st_lottie
 from streamlit_folium import folium_static
 import json
 from PIL import Image
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Import Downloaded JSON
 def import_json(path):
     with open(path, "r", encoding="utf8", errors="ignore") as file:
         url = json.load(file)
         return url
-
-# with open('../api_key.txt', 'r') as f:
-#     api_key = f.read()
-# openai.api_key = api_key
 
 if __name__ == '__main__':
     # Page Configuration 
@@ -64,15 +63,20 @@ if __name__ == '__main__':
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
             full_response = ""
-            for response in openai.ChatCompletion.create(
+            client = openai.OpenAI()
+
+            stream = client.chat.completions.create(
                 model = st.session_state["openai_model"],
                 messages = [
                     {"role": m["role"], "content" : m["content"]}
                     for m in st.session_state.messages
                 ],
                 stream = True,
-            ):
-                full_response += response.choices[0].delta.get("content", "")
-                message_placeholder.markdown(full_response + "▌")
+            )
+            for chunk in stream:
+                content = chunk.choices[0].delta.content
+                if content is not None:
+                    full_response += content
+                    message_placeholder.markdown(full_response + "▌")
             message_placeholder.markdown(full_response)
         st.session_state.messages.append({"role": "assistant", "content" : full_response})
