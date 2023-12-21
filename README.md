@@ -6,7 +6,7 @@ Create a language learning bot
 
 ### Run
 ```bash
-streamlit run main.py
+streamlit run homepage.py
 ```
 
 ### Function
@@ -19,7 +19,5 @@ streamlit run main.py
 ```bash
 conda create -n docint python=3.11
 conda activate docint
-conda install -c conda-forge ghostscript
 pip install -r requirements.txt
-pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 ```

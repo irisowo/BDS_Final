@@ -1,22 +1,28 @@
 import streamlit as st
 import openai
 from functools import partial
+import json
+from dotenv import load_dotenv
 
-# with open('../api_key.txt', 'r') as f:
-#     api_key = f.read()
-# openai.api_key = api_key
+load_dotenv()
 
 def get_question(topic, temperature=0.7):
     # Simulating an API call to OpenAI's GPT-3
-    return 'Question:\n___ is the capital of France.\nOption:\nA. Paris \nB. London \nC. Berlin \nD. Rome\nAnswer:\nA'
-    prompt = f'Create a fill-in-the-blank question about {topic} with multiple choice answers in the format: \nQuestion:\n___ is the capital of France.\nOption:\nA. Paris \nB. London \nC. Berlin \nD. Rome\nAnswer:\nA'
-    response = openai.Completion.create(
-        engine='davinci',
-        prompt=prompt,
+    client = openai.OpenAI()
+
+    system_msg = 'You are a helpful assistant designed to help students learn. Please help me create a fill-in-the-blank question with multiple choice answers in the format: \{"Question": "___ is the capital of France.", "Options": ["Paris", "London", "Taipei", "Beijing"], "Answer": "A" \}'
+    prompt = f'Create a fill-in-the-blank question with multiple choice answers about {topic} in JSON format.'
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
+        response_format={ "type": "json_object" },
+        messages=[
+            {'role': 'system', 'content': system_msg},
+            {'role': 'user', 'content': prompt}
+        ],
         temperature=temperature,
-        max_tokens=150
+        max_tokens=500
     )
-    return response.choices[0].text.strip()
+    return json.loads(response.choices[0].message.content)
 
 def check_answer(answer):
     answer = answer.strip()
@@ -43,14 +49,15 @@ def question_page():
         question_with_options = get_question(topic)
 
         # TODO - Parse the response from GPT-3 to get the question and options
-        tmp = question_with_options.split('\n')
-        question = tmp[1]
-        options = tmp[3:7]
-        answer = tmp[8]
+        question = question_with_options['Question']
+        options = question_with_options['Options']
+        answer = question_with_options['Answer']
         st.session_state.answer = answer
+        st.session_state.options = options
         st.write(question)
-        for option in options:
-            st.button(option[3:], on_click=partial(check_answer, option[0]))
+        idx2option = ['A', 'B', 'C', 'D']
+        for idx, option in enumerate(options):
+            st.button(option, on_click=partial(check_answer, idx2option[idx]))
 
 def result_page():
     st.title('Fill in the Blank Exercises')
@@ -59,6 +66,8 @@ def result_page():
         st.write('Correct!')
     else:
         st.write('Incorrect!')
+        option2idx = {'A': 0, 'B': 1, 'C': 2, 'D': 3}
+        st.write(f'The correct answer is {st.session_state.options[option2idx[st.session_state.answer]]}')
     
     def back_to_question():
         st.session_state.page = 'fill_main'

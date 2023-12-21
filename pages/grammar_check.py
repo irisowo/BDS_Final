@@ -1,25 +1,28 @@
 import streamlit as st
 import openai
 from functools import partial
+from dotenv import load_dotenv
 
-# with open('../api_key.txt', 'r') as f:
-#     api_key = f.read()
-# openai.api_key = api_key
+load_dotenv()
 
-def check_sentence(topic, temperature=0.7):
+def check_sentence(sentence, temperature=0.7):
     # Simulating an API call to OpenAI's GPT-3
-    result = 'Good'
-    st.session_state.result = result
-    st.session_state.page = 'grammar_result'
-    return
-    prompt = f'Create a fill-in-the-blank question about {topic} with multiple choice answers in the format: \nQuestion:\n___ is the capital of France.\nOption:\nA. Paris \nB. London \nC. Berlin \nD. Rome\nAnswer:\nA'
-    response = openai.Completion.create(
-        engine='davinci',
-        prompt=prompt,
+    client = openai.OpenAI()
+
+    system_msg = 'You are a helpful assistant designed to help students learn. Please help me check the grammar of the following sentence.'
+    
+    response = client.chat.completions.create(
+        model='gpt-3.5-turbo-1106',
+        messages=[
+            {'role': 'system', 'content': system_msg},
+            {'role': 'user', 'content': sentence}
+        ],
         temperature=temperature,
         max_tokens=150
     )
-    return response.choices[0].text.strip()
+    result = response.choices[0].message.content.strip()
+    st.session_state.result = result
+    st.session_state.page = 'grammar_result'
 
 
 def sentence_page():

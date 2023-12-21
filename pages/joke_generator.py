@@ -1,17 +1,17 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 from functools import partial
+from dotenv import load_dotenv
 
-# with open('../api_key.txt', 'r') as f:
-#     api_key = f.read()
-# openai.api_key = api_key
+load_dotenv()
 
 def get_joke(keyword, temperature=0.7):
     # Simulating an API call to OpenAI's GPT-3
-    return f'{keyword} Hahaha'
+    # return f'{keyword} Hahaha'
+    client = OpenAI()
     prompt = f'Create a joke containing the word \"{keyword}\".'
-    response = openai.Completion.create(
-        engine='davinci',
+    response = client.completions.create(
+        model="gpt-3.5-turbo-instruct",
         prompt=prompt,
         temperature=temperature,
         max_tokens=150
