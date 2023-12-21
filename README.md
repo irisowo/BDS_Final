@@ -6,20 +6,22 @@ Create a language learning bot
 
 ### Run
 ```bash
-streamlit run main.py
+streamlit run homepage.py
 ```
 
 ### Function
 ```
 1. conversation practice
 2. vocabulary test
+2. fill in the blank
+3. grammar check
+4. joke generator
+5. vocabulary practice
 ```
 
 ### Installation
 ```bash
-conda create -n docint python=3.11
-conda activate docint
-conda install -c conda-forge ghostscript
+conda create -n learnbot python=3.11
+conda activate learnbot
 pip install -r requirements.txt
-pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 ```
