@@ -8,8 +8,8 @@ from functools import partial
 
 def get_joke(keyword, temperature=0.7):
     # Simulating an API call to OpenAI's GPT-3
-    return 'Hahaha'
-    prompt = f'Create a joke containing the word \"{topic}\".'
+    return f'{keyword} Hahaha'
+    prompt = f'Create a joke containing the word \"{keyword}\".'
     response = openai.Completion.create(
         engine='davinci',
         prompt=prompt,
@@ -42,3 +42,9 @@ if st.button('Generate Joke'):
 #     question_page()
 # elif st.session_state.page == 'result':
 #     result_page()
+    
+from PIL import Image
+#Image In Sidebar 
+with st.sidebar.container():
+    image = Image.open(r"images/character.png")  
+    st.image(image, use_column_width=True)
