@@ -6,10 +6,11 @@ from dotenv import load_dotenv
 from functools import partial
 
 
-def get_question(topic, temperature=2):
+def get_question(topic, temperature=0.7):
     # Simulating an API call to OpenAI's GPT-3
     client = openai.OpenAI()
-    system_msg = 'You are a helpful assistant designed to help students learn. Please help me create a fill-in-the-blank question with multiple choice answers in the format: \{"Question": "___ is the capital of France.", "Options": ["Paris", "London", "Taipei", "Beijing"], "Answer": "A" \}'
+
+    system_msg = 'You are a helpful assistant designed to help students learn. Please help me create a fill-in-the-blank question with multiple choice answers in the json format: \{"Question": "___ is the capital of France.", "Options": ["Paris", "London", "Taipei", "Beijing"], "Answer": "A" \}.'
     prompt = f'Create a fill-in-the-blank question with multiple choice answers about {topic} in JSON format.'
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
@@ -21,7 +22,11 @@ def get_question(topic, temperature=2):
         temperature=temperature,
         max_tokens=500
     )
-    return json.loads(response.choices[0].message.content)
+    result = response.choices[0].message.content
+    # debugging
+    print("--"*10)
+    print(result)
+    return json.loads(result)
 
 
 def check_answer(answer):
@@ -32,8 +37,6 @@ def check_answer(answer):
 
 
 def question_page():
-    st.write('Complete the sentences by filling in the missing words.')
-
     # Topic selection
     topic_list = ['Science', 'History', 'Art', 'Technology', 'Literature']
     topic = st.selectbox('Select the topic', topic_list, index=topic_list.index(st.session_state.topic))
@@ -60,11 +63,10 @@ def question_page():
 
 
 def result_page():
-    st.write('Complete the sentences by filling in the missing words.')
     if st.session_state.correct:
-        st.write('Correct!')
+        st.success('Correct!')
     else:
-        st.write('Incorrect!')
+        st.warning('Incorrect!')
         option2idx = {'A': 0, 'B': 1, 'C': 2, 'D': 3}
         st.write(f'The correct answer is {st.session_state.options[option2idx[st.session_state.answer]]}')
     
@@ -80,9 +82,11 @@ def main():
 
     # Page Configuration 
     st.set_page_config(page_title= "Cloze Test", page_icon= "🐣")
-    st.title('Fill in the Blank Exercises 🐣')
+    st.title('🐣 Fill in the Blank Exercises')
     util.render_sider()
     util.render_banner(r"lottie_files/block_robot.json")
+    st.subheader('Complete the sentences by filling in the missing words.')
+
 
     if 'correct' not in st.session_state:
         st.session_state.correct = False

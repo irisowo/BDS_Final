@@ -16,6 +16,6 @@ def render_sider():
         st.image(image, use_column_width=True)
 
 
-def render_banner(file_path):
+def render_banner(file_path, height=400):
     data_oracle = import_json(file_path)
-    st_lottie(data_oracle, height = 400, key = "oracle")
+    st_lottie(data_oracle, height=height, key="oracle")

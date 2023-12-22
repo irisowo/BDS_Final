@@ -14,6 +14,7 @@ if __name__ == '__main__':
     )
 
     st.title("Language Assistant 🤖")
+    st.snow()
 
     # Banner
     util.render_banner(r"lottie_files/hi_robot.json")

@@ -17,15 +17,17 @@ def main():
     util.render_banner(r"lottie_files/talk_robot.json")
 
     # content
-    st.write("Users can use this page to ask ChatGPT general questions. This can be a viable space to use when the ChatGPT is unavailable but someone has a OpenAI key to use.")
+    st.subheader("Let's chat together")
+    st.write("Users can use this page to ask ChatGPT general questions.")
+    st.write("This can be a viable space to use when the ChatGPT is unavailable but someone has a OpenAI key to use.")
 
+    # Initialize
     if "openai_model" not in st.session_state:
         st.session_state["openai_model"] = "gpt-3.5-turbo-0613"
-
     # Start the Chat History 
     if "messages" not in st.session_state:
         st.session_state.messages = []
-        
+
     # Display chat messages from history on app rerun 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):

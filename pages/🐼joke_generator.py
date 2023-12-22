@@ -32,9 +32,10 @@ def main():
     st.set_page_config(page_title= "Joke Generator", page_icon= "🐼")
     st.title('🐼 Joke Generator')
     util.render_sider()
-    util.render_banner(r"lottie_files/power_robot.json")
-
-    st.subheader('Generate a joke based on a vocabulary you give.')
+    # util.render_banner(r"lottie_files/power_robot.json")
+    util.render_banner(r"lottie_files/hahaha.json", 200)
+    st.subheader('Generate a joke based on the vocabulary you give.')
+    
     keyword = st.text_input('Enter a vocabulary')
 
     # If the user has selected a topic, we generate a question
@@ -43,7 +44,7 @@ def main():
         # The prompt to GPT-3 should be crafted based on the selected topic
         # Simulate a response from GPT-3 (or another AI API)
         joke = get_joke(keyword)
-        st.write(joke)
+        st.info(joke)
 
 
 main()

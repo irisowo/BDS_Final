@@ -23,13 +23,11 @@ def check_sentence(sentence, temperature=0.7):
 
 
 def sentence_page():
-    st.subheader('Check your grammar with the help of AI.')
     sentence = st.text_input('Enter a sentence')
     st.button('Check Grammar', on_click=partial(check_sentence, sentence))
         
 
 def result_page():
-    st.subheader('Check your grammar with the help of AI.')
     st.write(st.session_state.result)
     def back_to_sentence():
         st.session_state.page = 'sentence'
@@ -42,9 +40,10 @@ def main():
 
     # Page Configuration 
     st.set_page_config(page_title= "Grammar checker", page_icon= "🐑")
-    st.title("Grammar checker 🐑")
+    st.title("🐑 Grammar checker")
     util.render_sider()
     util.render_banner(r"lottie_files/analyze_robot.json")
+    st.subheader('Check your grammar with the help of AI.')
 
     if 'page' not in st.session_state:
         st.session_state.page = 'grammar_main'

@@ -53,8 +53,6 @@ def double_check_answer(answer):
 
 
 def question_page():
-    st.write('Translate the following words from Chinese to English.')
-
     if not st.session_state.has_generated:
         # Topic selection
         topic_list = ['Science', 'History', 'Art', 'Technology', 'Literature']
@@ -67,24 +65,23 @@ def question_page():
 
 
 def write_question(topic):
-        st.session_state.topic = topic
-        ch_and_en_vocabulary = get_question(topic)
-        print(ch_and_en_vocabulary)
+    st.session_state.topic = topic
+    ch_and_en_vocabulary = get_question(topic)
+    print(ch_and_en_vocabulary)
 
-        ch = ch_and_en_vocabulary['Chinese']
-        en = ch_and_en_vocabulary['English']
-        st.session_state.chinese = ch
-        st.session_state.english = en
-        st.session_state.has_generated = True
+    ch = ch_and_en_vocabulary['Chinese']
+    en = ch_and_en_vocabulary['English']
+    st.session_state.chinese = ch
+    st.session_state.english = en
+    st.session_state.has_generated = True
 
 
 def result_page():
-    st.write('Translate the following words from Chinese to English.')
     if st.session_state.correct:
-        st.write('Correct!')
+        st.success('Correct!')
     else:
-        st.write('Incorrect!')
-        st.write(f'The correct answer should be {st.session_state.english}')
+        st.warning('Incorrect!')
+        st.write(f"""**The correct answer should be {st.session_state.english}**""")
     
     def back_to_question():
         st.session_state.page = 'vocabulary_main'
@@ -98,10 +95,10 @@ def main():
 
     # Page Configuration 
     st.set_page_config(page_title= "Vocabulary Practice", page_icon= "🐼")
-    st.title("Vocabulary Practice 🍅")
+    st.title("🍅 Vocabulary Practice")
     util.render_sider()
     util.render_banner(r"lottie_files/oracle_robot.json")
-
+    st.subheader('Translate the following words from Chinese to English.')
 
     if 'correct' not in st.session_state:
         st.session_state.correct = False
